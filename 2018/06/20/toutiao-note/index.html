@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="Cache-Control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>sixFlower&#39;s Studio</title>
+    <title>来自头条的屏幕适配方案 · sixFlower&#39;s Studio</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -70,6 +70,8 @@
 
     <link rel="preload" href= /css/style.css?v=20180604 as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <link rel="stylesheet" href= /css/mobile.css?v=20180604 media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
@@ -194,14 +196,23 @@
 </head>
 
     
-        <body class="home-body">
+        <body class="post-body">
     
     
-<header class="header index-header">
+<header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >sixFlower&#39;s Studio.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">来自头条的屏幕适配方案</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/>sixFlower's Studio.</a>
 </header>
@@ -222,17 +233,17 @@ height:50vh;
     <!-- 主页  -->
     
     
-    <!-- 文章页  -->
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/index-bg-2.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            sixFlower's Studio.
-            <!-- 文章页  -->
+            来自头条的屏幕适配方案
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
@@ -240,12 +251,49 @@ height:50vh;
             <!-- 主页副标题  -->
             
             
-                Remember, Hope is a good thing, maybe the best of things and no good thing ever dies!
-            
-            <!-- 文章页  -->
+            <!-- 404 -->
             
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Android 性能优化">Android 性能优化</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count">215</span> / Reading time: <span class="post-count">1 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2018/06/20</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -346,293 +394,65 @@ height:50vh;
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/06/20/toutiao-note/" >
-            
-                <span>来自头条的屏幕适配方案</span>
-        </a>
-        <div class="abstract-content">
-            来自头条的屏幕适配方案传统的dp适配方式
-android中的dp在渲染前会将dp转为px，计算如下
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="来自头条的屏幕适配方案"><a href="#来自头条的屏幕适配方案" class="headerlink" title="来自头条的屏幕适配方案"></a>来自头条的屏幕适配方案</h2><h3 id="传统的dp适配方式"><a href="#传统的dp适配方式" class="headerlink" title="传统的dp适配方式"></a>传统的dp适配方式</h3><blockquote>
+<p>android中的dp在渲染前会将dp转为px，计算如下</p>
+<ul>
+<li>px = density * dp</li>
+<li>density = dpi / 160;</li>
+<li>px = dp * (dpi / 160)<br>而<code>dpi</code>是根据屏幕真实的分辨率和尺寸来计算的，每个设备都可能不同</li>
+</ul>
+</blockquote>
+<h3 id="屏幕尺寸，分辨率，像素密度三者关系"><a href="#屏幕尺寸，分辨率，像素密度三者关系" class="headerlink" title="屏幕尺寸，分辨率，像素密度三者关系"></a>屏幕尺寸，分辨率，像素密度三者关系</h3><p> <img src="./1528424270533.png" alt="dpi计算方式"></p>
+<h3 id="梳理需求"><a href="#梳理需求" class="headerlink" title="梳理需求"></a>梳理需求</h3><ol>
+<li>支持以宽或者高一个维度去适配，保持 该维度上和设计图一致。</li>
+<li>支持dp和sp单位，控制迁移成本到最小。</li>
+</ol>
+<h3 id="最终方案"><a href="#最终方案" class="headerlink" title="最终方案"></a>最终方案</h3><p>因为Android中很多<code>dp</code>转换的场合，基本都是通过<code>DisplayMetrics</code>来计算的，因此，达到适配，我们值需要修改<code>DisplayMetrics</code>中和dp转换的变量即可。</p>
+<ul>
+<li>假设设计图宽度是360p，以宽的维度来适配<br>那么适配后的<code>density = 设备真实宽（px）/360</code><br><img src="./1528425320300.png" alt="最终方案"></li>
+</ul>
 
-px = density * dp
-density = dpi / 160;
-px = dp...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Android 性能优化">Android 性能优化</a>
-    
-</div>
-            
-        </div>
     </article>
+    <!-- license  -->
     
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/06/20/RxJava-note/" >
-            
-                <span>RxJava随笔</span>
-        </a>
-        <div class="abstract-content">
-            RxJava随笔
-RxJava是一个异步处理事件的库。优势：随着程序越来越复杂，RxJava依然能够保持简洁。
-
-扔物线大神的RxJava教程
-API介绍和原理分析###概念：扩展的观察者模式
-...
+        <div class="license-wrapper">
+            <p>原文作者: <a href="http://yoursite.com">John Doe</a>
+            <p>原文链接: <a href="http://yoursite.com/2018/06/20/toutiao-note/">http://yoursite.com/2018/06/20/toutiao-note/</a>
+            <p>发表日期: <a href="http://yoursite.com/2018/06/20/toutiao-note/">June 20th 2018, 5:22:19</a>
+            <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Android">Android</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/06/20/mvp-note/" >
-            
-                <span>Android中的MVP架构</span>
-        </a>
-        <div class="abstract-content">
-            MVP模式解析标签： Android   架构   MVP
-
-MVP模式的核心思想MVP将Activity中的UI逻辑抽象成View接口，把业务逻辑抽象成Presenter接口，Model类还是...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Android 架构">Android 架构</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/06/20/gson-note/" >
-            
-                <span>Andorid中Gson的正确食用方式！</span>
-        </a>
-        <div class="abstract-content">
-            Gson使用
-项目地址：https://github.com/google/gson
-
-实例化Gson对象
-通过构造函数获取
- Gson gson = new  Gson();
-
-通过GsonB...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Android">Android</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/06/20/GitNote/" >
-            
-                <span>扔物线Git掘金小册笔记</span>
-        </a>
-        <div class="abstract-content">
-            
-摘录自扔物线大神的Git掘金小册笔记，详情请点击标题查看原文。
-
-
-扔物线Git小册笔记版本控制系统的核心版本控制/主动提交/中央仓库
-分布式版本控制系统和中央式的区别中央式的版本控制系统：保...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "版本控制">版本控制</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/06/20/hello-world/" >
-            
-                <span>Hello World</span>
-        </a>
-        <div class="abstract-content">
-            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any ...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/20</span>
-            </div>
-            <!-- tags  -->
-            
-        </div>
-    </article>
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2018/06/20/RxJava-note/" title= RxJava随笔 >
+                    <div class="prevTitle">RxJava随笔</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
     
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+    <!-- 评论 -->
 </main>
             <!-- profile -->
-            
-            <div class="profile">
-    <img class="profile-avatar" src= /avatar/neko-1.jpg >
-    <div class="profile-name">sixFlower</div>
-    
-    <div class="profile-signature">
-        记录在工作和学习上的经验
-    </div>
-    
-    
-    <div class="profile-social">
-        
-    
-        
-            
-                <a href="mailto:mengmengdahyf@gmail.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="//github.com/DeveloperHu" class="iconfont-archer github" target="_blank" title=github></a>
-            
-        
-    
-        
-            
-                <span class="iconfont-archer wechat" title=wechat>
-                  
-                  <img class="profile-qr" src="/assets/qrcode.png" />
-                </span>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-    </div>
-    
-    
-        <div class="friends">
-            <div>FRIENDS</div>
-            
-                
-                    <span>
-                        <a href= //www.baidu.com target="_black">friendA</a>
-                    </span>
-                
-            
-                
-                    <span>
-                        <a href= //www.google.com target="_black">Google</a>
-                    </span>
-                
-            
-                
-            
-        </div>
-    
-    
-        <div class="about-me">
-            <a href = "/about" >ABOUT ME</a>
-        </div>
-    
-</div>
             
         </div>
         <footer class="footer footer-unloaded">
@@ -707,6 +527,24 @@ MVP模式的核心思想MVP将Activity中的UI逻辑抽象成View接口，把业
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#来自头条的屏幕适配方案"><span class="toc-number">1.</span> <span class="toc-text">来自头条的屏幕适配方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#传统的dp适配方式"><span class="toc-number">1.1.</span> <span class="toc-text">传统的dp适配方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#屏幕尺寸，分辨率，像素密度三者关系"><span class="toc-number">1.2.</span> <span class="toc-text">屏幕尺寸，分辨率，像素密度三者关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#梳理需求"><span class="toc-number">1.3.</span> <span class="toc-text">梳理需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最终方案"><span class="toc-number">1.4.</span> <span class="toc-text">最终方案</span></a></li></ol></li></ol>
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -906,6 +744,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     </body>
 </html>

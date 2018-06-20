@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html>
+    <!-- title -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="John Doe">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="John Doe">
+    <meta name="keywords" content="Hexo | John Doe">
+    <meta name="description" content="">
+    <meta name="Cache-Control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>Andorid中Gson的正确食用方式！ · sixFlower&#39;s Studio</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s 1;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= /css/style.css?v=20180604 as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= /css/mobile.css?v=20180604 media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/android_sh.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >sixFlower&#39;s Studio.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Andorid中Gson的正确食用方式！</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>sixFlower's Studio.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style=
+
+
+
+
+
+
+
+
+height:50vh;
+
+>
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Andorid中Gson的正确食用方式！
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Android">Android</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count">1,641</span> / Reading time: <span class="post-count">8 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2018/06/20</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h3 id="Gson使用"><a href="#Gson使用" class="headerlink" title="Gson使用"></a>Gson使用</h3><blockquote>
+<p>项目地址：<a href="https://github.com/google/gson" target="_blank" rel="noopener">https://github.com/google/gson</a></p>
+</blockquote>
+<h4 id="实例化Gson对象"><a href="#实例化Gson对象" class="headerlink" title="实例化Gson对象"></a>实例化Gson对象</h4><ol>
+<li><p>通过构造函数获取</p>
+<p> Gson gson = new  Gson();</p>
+</li>
+<li><p>通过<code>GsonBuilder</code>获取，可以进行多项配置</p>
+<p> Gson gson = new GsonBuilder().create();</p>
+</li>
+</ol>
+<h4 id="生成Json字符串"><a href="#生成Json字符串" class="headerlink" title="生成Json字符串"></a>生成Json字符串</h4><pre><code>JsonObject jsonObject = new JsonObject();
+jsonObject.addProperty(&quot;name&quot;,&quot;hyf&quot;);
+jsonObject.addProperty(&quot;age&quot;,21);
+jsonObject.addProperty(&quot;Boolean&quot;,true);
+</code></pre><p>  JsonElement</p>
+<pre><code>JsonObject jsonObject = new JsonObject();
+Json.addProperty(&quot;String&quot;, &quot;leavesC&quot;);
+jsonObject.addProperty(&quot;Number&quot;, 23);
+jsonObject.addProperty(&quot;Number&quot;, 22.9);
+jsonObject.addProperty(&quot;Boolean&quot;, true);
+jsonObject.addProperty(&quot;Char&quot;, &apos;c&apos;);
+JsonObject jsonElement = new JsonObject();
+jsonElement.addProperty(&quot;Boolean&quot;, false);
+jsonElement.addProperty(&quot;Double&quot;, 25.9);
+jsonElement.addProperty(&quot;Char&quot;, &apos;c&apos;);
+jsonObject.add(&quot;JsonElement&quot;, jsonElement);
+</code></pre><h4 id="Json和数组-List转换"><a href="#Json和数组-List转换" class="headerlink" title="Json和数组/List转换"></a>Json和数组/List转换</h4><h5 id="1-json转字符串数组"><a href="#1-json转字符串数组" class="headerlink" title="1. json转字符串数组"></a>1. json转字符串数组</h5><pre><code>Gson gson = new Gson();
+String jsonArray = &quot;[\&quot;3\&quot;,\&quot;4\&quot;,\&quot;5\&quot;]&quot;;
+String[] strings = gson.fromJson(jsonArray,String[].class);
+</code></pre><h5 id="2-字符串数组转json"><a href="#2-字符串数组转json" class="headerlink" title="2. 字符串数组转json"></a>2. 字符串数组转json</h5><pre><code>String jsonArray = gson.toJson(jsonArray,new TypeToken&lt;String&gt;(){}.getType());
+</code></pre><h5 id="3-json转List"><a href="#3-json转List" class="headerlink" title="3. json转List"></a>3. json转List</h5><pre><code>String jsonArray = &quot;[....]&quot;  //此处jsonArray与(1)中相同
+List&lt;String&gt; stringList = gson.fromJson(jsonArray,new TypeToken&lt;List&lt;String&gt;&gt;(){}.getType());
+</code></pre><h5 id="4-List转Json"><a href="#4-List转Json" class="headerlink" title="4. List转Json"></a>4. List转Json</h5><pre><code>String jsonArray = gson.toJson(stringList,new TypeToken&lt;List&lt;String&gt;&gt;(){}.getType());
+</code></pre><h4 id="序列化和反序列化"><a href="#序列化和反序列化" class="headerlink" title="序列化和反序列化"></a>序列化和反序列化</h4><p>#####1. 序列化</p>
+<pre><code>User user = new User(&quot;hyf&quot;,22,true);   //假设有一个userBean里面有name,age,gender
+Gson gson = new Gson();
+String json = gson.toJson(user);
+//out: {&quot;name&quot;:&quot;hyf&quot;,&quot;age&quot;:22,&quot;gender&quot;:true}
+</code></pre><p>#####2. 反序列化</p>
+<pre><code>User user = gson.fromJson(json,User.class);
+//此处的json为上面序列化输出的json字符串
+</code></pre><h4 id="属性重命名"><a href="#属性重命名" class="headerlink" title="属性重命名"></a>属性重命名</h4><p>修改<code>User</code>类，为<code>name</code>声明<code>SerializedName</code>。其中<code>value</code>设置属性名，而<code>alternate</code>则设置多个备选属性名</p>
+<pre><code>public class User{
+    @SerializedName(value = &quot;userName&quot;,alternate={&quot;user_name&quot;,&quot;Name&quot;})
+    private String name;
+    private int age;
+    private boolean gender;
+}
+</code></pre><h4 id="字段过滤"><a href="#字段过滤" class="headerlink" title="字段过滤"></a>字段过滤</h4><p>#####1. 基于@Expose注解<br>Expose注解的注解值声明情况有四种</p>
+<pre><code>@Expose(serialize=true,deserialize=true)//序列化和反序列化都生效
+  @Expose(serialize=false,deserialize=false)
+//序列化和反序列化都不生效
+   @Expose(serialize=true,deserialize=false)
+//序列化生效，反序列化不生效
+   @Expose(serialize=false,deserialize=true)
+//序列化不生效，反序列化生效
+</code></pre><p>#####2. 基于版本<br>Gson提供了<code>@Since</code>和<code>@Until</code>两个注解基于版本对字段进行过滤，它们都包含一个<code>Double</code>值，用于设置版本号。</p>
+<ul>
+<li>@Since  从…开始</li>
+<li>@Until  到…为止</li>
+<li>它们要配合<code>GsonBuilder</code>配合使用<br>当版本（<code>GsonBuilder</code>设置的版本）大于或等于<code>Since</code>值或小于<code>Until</code>时，字段会进行序列化和反序列操作，而没有声明注解的字段都会加入序列化和反序列操作。</li>
+</ul>
+<p>例子：修改User类</p>
+<pre><code>public class User {
+
+@Since(1.4)
+private String a;
+
+@Since(1.6)
+private String b;
+
+@Since(1.8)
+private String c;
+
+@Until(1.6)
+private String d;
+
+@Until(2.0)
+private String e;
+
+public User(String a, String b, String c, String d, String e) {
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.d = d;
+    this.e = e;
+}
+
+@Override
+public String toString() {
+    return &quot;User{&quot; +
+            &quot;a=&apos;&quot; + a + &apos;\&apos;&apos; +
+            &quot;, b=&apos;&quot; + b + &apos;\&apos;&apos; +
+            &quot;, c=&apos;&quot; + c + &apos;\&apos;&apos; +
+            &quot;, d=&apos;&quot; + d + &apos;\&apos;&apos; +
+            &quot;, e=&apos;&quot; + e + &apos;\&apos;&apos; +
+            &apos;}&apos;;
+}
+}
+
+    Gson gson = new GsonBuilder().setVersion(1.6).create();
+    User user = new User(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;);
+    System.out.println();
+    System.out.println(gson.toJson(user));
+
+    String json = &quot;{\&quot;a\&quot;:\&quot;A\&quot;,\&quot;b\&quot;:\&quot;B\&quot;,\&quot;c\&quot;:\&quot;C\&quot;,\&quot;d\&quot;:\&quot;D\&quot;,\&quot;e\&quot;:\&quot;E\&quot;}&quot;;
+    user = gson.fromJson(json, User.class);
+    System.out.println();
+    System.out.println(user.toString());
+</code></pre><p>结果输出：只会序列化和反序列化a,b,c</p>
+<pre><code>序列化：{&quot;a&quot;:&quot;A&quot;,&quot;b&quot;:&quot;B&quot;,&quot;e&quot;:&quot;E&quot;}
+反序列化：User{a=&apos;A&apos;,b=&apos;B&apos;,c=&apos;null&apos;,d=&apos;null&apos;,e=&apos;E&apos;}
+</code></pre><h5 id="3-基于访问修饰符"><a href="#3-基于访问修饰符" class="headerlink" title="3.基于访问修饰符"></a>3.基于访问修饰符</h5><p>通过<code>GsonBuilder</code>对象的<code>excludeFieldsWithModifiers</code>方法来指定<strong>不进行序列化和反序列话操作的访问修饰符字段</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class ModifierSample &#123;</span><br><span class="line"></span><br><span class="line">    public String publicField = &quot;public&quot;;</span><br><span class="line"></span><br><span class="line">    protected String protectedField = &quot;protected&quot;;</span><br><span class="line"></span><br><span class="line">    private String privateField = &quot;private&quot;;</span><br><span class="line"></span><br><span class="line">    String defaultField = &quot;default&quot;;</span><br><span class="line"></span><br><span class="line">    final String finalField = &quot;final&quot;;</span><br><span class="line"></span><br><span class="line">    static String staticField = &quot;static&quot;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">        Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PRIVATE, Modifier.STATIC).create();</span><br><span class="line">        ModifierSample modifierSample = new ModifierSample();</span><br><span class="line">        System.out.println(gson.toJson(modifierSample));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>输出：private和static的字段将不会被序列化和反序列化</p>
+<h5 id="4-基于策略"><a href="#4-基于策略" class="headerlink" title="4.基于策略"></a>4.基于策略</h5><p>通过<code>GsonBuilder</code>的<code>setExclusionStrategies(ExclusionStrategy... strategies)</code>来直接排除<strong>指定字段名或者指定字段类型</strong>不进行序列化和反序列化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Gson gson = new GsonBuilder().setExclusionStrategies（new ExclusionStrategy()&#123;</span><br><span class="line"> @Override</span><br><span class="line"> public boolean shouldSkipField(FieldAttributes fieldAttributes) &#123;</span><br><span class="line">   //排除指定字段名（这里指定字段名为）</span><br><span class="line"> return fieldAttributes.getName().equals(&quot;intField&quot;);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">Override</span><br><span class="line">public boolean shouldSkipClass(Class&lt;?&gt; aClass) &#123;</span><br><span class="line">//排除指定字段类型(这里指定dobule类)</span><br><span class="line">return aClass.getName().equals(double.class.getName());</span><br><span class="line">&#125;）.create();</span><br></pre></td></tr></table></figure>
+<p>setExclusionStrategies 方法在序列化和反序列化时都会生效，如果只是想指定其中一种情况下的排除策略或分别指定排除策略，可以改为使用以下两个方法</p>
+<ul>
+<li><p>addSerializationExclusionStrategy(ExclusionStrategy strategy);</p>
+</li>
+<li><p>addDeserializationExclusionStrategy(ExclusionStrategy strategy);</p>
+</li>
+</ul>
+<p>####个性化设置</p>
+<p>#####1. 序列化时输出null</p>
+<pre><code>Gson gson = new GsonBuilder()
+             .serializeNulls();
+             .create();
+</code></pre><p>序列化User类： 假设user类（null,24,true）<br>输出：{“name”:null,”age”:24,”gender”:true}</p>
+<h5 id="2-格式化输出Json"><a href="#2-格式化输出Json" class="headerlink" title="2.格式化输出Json"></a>2.格式化输出Json</h5><p>Gson默认序列化的json字符串不够直观，可以使用<code>GsonBuilder</code>的<code>setPrettyPrinting</code>进行格式化输出</p>
+<pre><code>Gson gson = new GsonBuilder()
+            .serializeNulls()
+            .setPrettyPrinting()
+            .create();
+</code></pre><p>输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;name&quot;:null,</span><br><span class="line">	&quot;age&quot;:24,</span><br><span class="line">	&quot;gender&quot;:true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="3-格式化时间"><a href="#3-格式化时间" class="headerlink" title="3.格式化时间"></a>3.格式化时间</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Gson gson = new GsonBuilder()</span><br><span class="line">			.setDateFormat(&quot;yyyy-MM-dd HH:mm:ss:SSS&quot;)</span><br><span class="line">			.create();</span><br></pre></td></tr></table></figure>
+<h4 id="TypeAdapter"><a href="#TypeAdapter" class="headerlink" title="TypeAdapter"></a>TypeAdapter</h4><blockquote>
+<p>TypeAdapter是一个泛型抽象类，用于接管某种类型的序列化和反序列过程，包含两个抽象方法，分别用于自定义序列化和反序列化的过程。</p>
+</blockquote>
+<p>例子：对应还是使用User类（包含name,age,gender）<br>定义一个类继承TypeAdapter<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">public class UserTypeAdapter extends TypeAdapter&lt;User&gt;&#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void write(JsonWriter jsonWriter, User user) throws IOException &#123;</span><br><span class="line">        //流式序列化成对象开始</span><br><span class="line">        jsonWriter.beginObject();</span><br><span class="line">        //将Json的Key值都指定为大写字母开头</span><br><span class="line">        jsonWriter.name(&quot;Name&quot;).value(user.getName());</span><br><span class="line">        jsonWriter.name(&quot;Age&quot;).value(user.getAge());</span><br><span class="line">        jsonWriter.name(&quot;Gender&quot;).value(user.isSex());</span><br><span class="line">        //流式序列化结束</span><br><span class="line">        jsonWriter.endObject();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public User read(JsonReader jsonReader) throws IOException &#123;</span><br><span class="line">        User user = new User();</span><br><span class="line">        //流式反序列化开始</span><br><span class="line">        jsonReader.beginObject();</span><br><span class="line">        while (jsonReader.hasNext()) &#123;</span><br><span class="line">            switch (jsonReader.nextName()) &#123;</span><br><span class="line">                //首字母大小写均合法</span><br><span class="line">                case &quot;name&quot;:</span><br><span class="line">                case &quot;Name&quot;:</span><br><span class="line">                    user.setName(jsonReader.nextString());</span><br><span class="line">                    break;</span><br><span class="line">                case &quot;age&quot;:</span><br><span class="line">                    user.setAge(jsonReader.nextInt());</span><br><span class="line">                    break;</span><br><span class="line">                case &quot;gender&quot;:</span><br><span class="line">                    user.setGender(jsonReader.nextBoolean());</span><br><span class="line">                    break;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        //流式反序列化结束</span><br><span class="line">        jsonReader.endObject();</span><br><span class="line">        return user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    Gson gson = new GsonBuilder()</span><br><span class="line">			    .registerTypeAdapter(User.class,new UserTypeAdapter())</span><br><span class="line">			    .create();</span><br><span class="line">User user = new User(&quot;hyf&quot;,22,true);</span><br><span class="line">String json = gson.toJson(user);</span><br><span class="line">user = gson.fromJson(json,User.class);</span><br></pre></td></tr></table></figure></p>
+<p>输出序列化后的<code>json</code>和反序列化后的<code>user</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;Name&quot;:&quot;hyf&quot;,&quot;Age&quot;:22,&quot;Gender&quot;:true&#125;</span><br><span class="line">User&#123;name=&quot;hyf&quot;,age=22,gender=true&#125;</span><br></pre></td></tr></table></figure></p>
+<p>TypeAdapter同时接管了序列化和反序列化操作</p>
+<ul>
+<li>JsonSerializer 只接管序列化过程的接口</li>
+<li>JsonDeserializer 只接管反序列化过程的接口</li>
+</ul>
+<h4 id="TypeAdapterFactory"><a href="#TypeAdapterFactory" class="headerlink" title="TypeAdapterFactory"></a>TypeAdapterFactory</h4><blockquote>
+<p>TypeAdapterFactory  是用于创建 TypeAdapter 的工厂类，通过参数 TypeToken 来查找确定对应的 TypeAdapter , 如果没有就返回 null 并由 Gson 默认的处理方法来进行序列化和反序列化，否则就由客户预定义的 TypeAdapter 来进行处理。</p>
+</blockquote>
+<pre><code>Gson gson = new GsonBuilder()
+            .registerTypeAdapterFactory(new TypeAdapterFactory() {
+        @Override
+        public &lt;T&gt; TypeAdapter&lt;T&gt; create(Gson gson, TypeToken&lt;T&gt; typeToken) {
+            //如果 Gson 需要与 User 类相关的 TypeAdapter ，则返回我们自己定义的 TypeAdapter 对象
+            if (typeToken.getType().getTypeName().equals(User.class.getTypeName())) {
+                return (TypeAdapter&lt;T&gt;) new UserTypeAdapter();
+            }
+            //找不到则返回null
+            return null;
+        }
+    })
+    .create();
+</code></pre><p><a href="https://www.jianshu.com/u/9df45b87cfdf" target="_blank" rel="noopener">原文地址</a></p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者: <a href="http://yoursite.com">John Doe</a>
+            <p>原文链接: <a href="http://yoursite.com/2018/06/20/gson-note/">http://yoursite.com/2018/06/20/gson-note/</a>
+            <p>发表日期: <a href="http://yoursite.com/2018/06/20/gson-note/">June 20th 2018, 5:09:48</a>
+            <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2018/06/20/mvp-note/" title= Android中的MVP架构 >
+                    <div class="nextTitle">Android中的MVP架构</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2018/06/20/GitNote/" title= 扔物线Git掘金小册笔记 >
+                    <div class="prevTitle">扔物线Git掘金小册笔记</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:mengmengdahyf@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/DeveloperHu" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/qrcode.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gson使用"><span class="toc-number">1.</span> <span class="toc-text">Gson使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实例化Gson对象"><span class="toc-number">1.1.</span> <span class="toc-text">实例化Gson对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生成Json字符串"><span class="toc-number">1.2.</span> <span class="toc-text">生成Json字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Json和数组-List转换"><span class="toc-number">1.3.</span> <span class="toc-text">Json和数组/List转换</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-json转字符串数组"><span class="toc-number">1.3.1.</span> <span class="toc-text">1. json转字符串数组</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-字符串数组转json"><span class="toc-number">1.3.2.</span> <span class="toc-text">2. 字符串数组转json</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-json转List"><span class="toc-number">1.3.3.</span> <span class="toc-text">3. json转List</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-List转Json"><span class="toc-number">1.3.4.</span> <span class="toc-text">4. List转Json</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#序列化和反序列化"><span class="toc-number">1.4.</span> <span class="toc-text">序列化和反序列化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#属性重命名"><span class="toc-number">1.5.</span> <span class="toc-text">属性重命名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#字段过滤"><span class="toc-number">1.6.</span> <span class="toc-text">字段过滤</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-基于访问修饰符"><span class="toc-number">1.6.1.</span> <span class="toc-text">3.基于访问修饰符</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-基于策略"><span class="toc-number">1.6.2.</span> <span class="toc-text">4.基于策略</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-格式化输出Json"><span class="toc-number">1.6.3.</span> <span class="toc-text">2.格式化输出Json</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-格式化时间"><span class="toc-number">1.6.4.</span> <span class="toc-text">3.格式化时间</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TypeAdapter"><span class="toc-number">1.7.</span> <span class="toc-text">TypeAdapter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TypeAdapterFactory"><span class="toc-number">1.8.</span> <span class="toc-text">TypeAdapterFactory</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 6
+        <!-- search  -->
+        </div>
+            <div class="site-search popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/20</span><a class="archive-post-title" href= "/2018/06/20/toutiao-note/" >来自头条的屏幕适配方案</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/20</span><a class="archive-post-title" href= "/2018/06/20/mvp-note/" >Android中的MVP架构</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/20</span><a class="archive-post-title" href= "/2018/06/20/RxJava-note/" >RxJava随笔</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/20</span><a class="archive-post-title" href= "/2018/06/20/gson-note/" >Andorid中Gson的正确食用方式！</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/20</span><a class="archive-post-title" href= "/2018/06/20/GitNote/" >扔物线Git掘金小册笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/20</span><a class="archive-post-title" href= "/2018/06/20/hello-world/" >Hello World</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="版本控制"><span class="iconfont-archer">&#xe606;</span>版本控制</span>
+    
+        <span class="sidebar-tag-name" data-tags="Android"><span class="iconfont-archer">&#xe606;</span>Android</span>
+    
+        <span class="sidebar-tag-name" data-tags="Android 架构"><span class="iconfont-archer">&#xe606;</span>Android 架构</span>
+    
+        <span class="sidebar-tag-name" data-tags="Android 性能优化"><span class="iconfont-archer">&#xe606;</span>Android 性能优化</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "John Doe"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
