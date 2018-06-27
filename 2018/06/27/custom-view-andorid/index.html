@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="Cache-Control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>Hello World · sixFlower&#39;s Studio</title>
+    <title>Android自定义View(一) · sixFlower&#39;s Studio</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -210,7 +210,7 @@
                 <a href="/" >sixFlower&#39;s Studio.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">Hello World</a>
+                <a href="#" class="post-name">Android自定义View(一)</a>
             </div>
     </div>
     
@@ -242,7 +242,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Hello World
+            Android自定义View(一)
             <!-- 404 -->
             
         </h1>
@@ -259,14 +259,20 @@ height:50vh;
             <div class="post-intros">
                 <!-- 文章页标签  -->
                 
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Android">Android</a>
+    
+</div>
+                
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">78</span> / Reading time: <span class="post-count">1 min</span></span>
+                        <span>Word count: <span class="post-count">853</span> / Reading time: <span class="post-count">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2018/06/20</span>
+                    <span class="post-intro-time">2018/06/27</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -390,23 +396,62 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <blockquote>
+<p>原文摘抄并整理扔物线大神的Hencoder教程</p>
+</blockquote>
+<h2 id="Android自定义View-一"><a href="#Android自定义View-一" class="headerlink" title="Android自定义View(一)"></a>Android自定义View(一)</h2><p>###View的测量</p>
+<ul>
+<li><strong>EXACTLY</strong>  精确值模式  指定控件的<code>layout_width</code>/<code>layout_height</code>为固定值或指定为<code>match_parent</code></li>
+<li><strong>AT_MOST</strong>  最大值模式 指定控件的宽高属性为<code>wrap_content</code>时</li>
+<li><strong>UNSPECIFIED</strong>    不指定控件大小测量模式，<code>View</code>想多大就多大，通常在自定义view时使用。</li>
+</ul>
+<p>ii:<code>View</code>默认的<code>onMeasure()</code>只支持<code>EXACTLY</code>模式。除非重写此方法。</p>
+<h3 id="Canvas"><a href="#Canvas" class="headerlink" title="Canvas"></a>Canvas</h3><h4 id="drawColor-int-color"><a href="#drawColor-int-color" class="headerlink" title="drawColor(int color)"></a>drawColor(int color)</h4><p>一般用于设置底色和半透明蒙版(“#7f000000”)<br>类似的还有<strong><code>drawRGB(int r,int g,int b)</code></strong>、<strong><code>drawARGB(int a,int r,int g,int b)</code></strong></p>
+<h4 id="drawCircle-float-centerX-float-centerY-float-radius-Paint-paint"><a href="#drawCircle-float-centerX-float-centerY-float-radius-Paint-paint" class="headerlink" title="drawCircle(float centerX,float centerY,float radius,Paint paint)"></a>drawCircle(float centerX,float centerY,float radius,Paint paint)</h4><p>画圆</p>
+<h4 id="drawRect-float-left-float-top-float-right-float-bottom"><a href="#drawRect-float-left-float-top-float-right-float-bottom" class="headerlink" title="drawRect(float left,float top,float right,float bottom)"></a>drawRect(float left,float top,float right,float bottom)</h4><p>画矩形，对应的是矩形四条边的坐标<br>也可以使用<strong><code>drawRect(Rect rect,Paint paint)</code></strong>、<strong><code>drawRect(RectF rect,Paint paint)</code></strong>来绘制矩形</p>
+<h4 id="drawBitmap-Bitmap-bitmap-float-left-float-top-Paint-paint"><a href="#drawBitmap-Bitmap-bitmap-float-left-float-top-Paint-paint" class="headerlink" title="drawBitmap(Bitmap bitmap,float left,float top,Paint paint)"></a>drawBitmap(Bitmap bitmap,float left,float top,Paint paint)</h4><p>画Bitmap</p>
+<h4 id="drawText-String-text-float-x-float-y-Paint-paint"><a href="#drawText-String-text-float-x-float-y-Paint-paint" class="headerlink" title="drawText(String text,float x,float y,Paint paint)"></a>drawText(String text,float x,float y,Paint paint)</h4><p>绘制文字</p>
+<h3 id="Paint"><a href="#Paint" class="headerlink" title="Paint"></a>Paint</h3><h4 id="setColor"><a href="#setColor" class="headerlink" title="setColor"></a>setColor</h4><h4 id="setStyle-Paint-Style-style"><a href="#setStyle-Paint-Style-style" class="headerlink" title="setStyle(Paint.Style style)"></a>setStyle(Paint.Style style)</h4><p>设置画笔模式：<br><strong>Paint.Style.STROKE</strong> 勾边<br><strong>Paint.Style.FILL</strong> 实心<br><strong>Paint.Style. FILL_AND_STROKE</strong> 画线并填充</p>
+<h4 id="setStrokeWidth-float-width"><a href="#setStrokeWidth-float-width" class="headerlink" title="setStrokeWidth(float width)"></a>setStrokeWidth(float width)</h4><p>设置画笔线条宽度</p>
+<h4 id="setAntiAlias-boolean-aa"><a href="#setAntiAlias-boolean-aa" class="headerlink" title="setAntiAlias(boolean aa)"></a>setAntiAlias(boolean aa)</h4><p>设置是否开启抗锯齿<br>也可以用以下方法</p>
+<pre><code>Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+</code></pre><h4 id="drawPoint-float-x-float-y-Paint-paint"><a href="#drawPoint-float-x-float-y-Paint-paint" class="headerlink" title="drawPoint(float x,float y,Paint paint)"></a>drawPoint(float x,float y,Paint paint)</h4><p>画点<br>点的大小 —-&gt; <code>paint.setStrokeWidth(width)</code><br>点的形状 —-&gt; <code>paint.setStrokeCap(cap)</code>，分别为<code>ROUND</code>(圆头)，<code>BUTT</code>（平头），<code>SQUARE</code>（方头）</p>
+<h4 id="drawPoints-float-pts-int-offset-int-count-Paint-paint-drawPoints-float-pts-Paint-paint-画点-批量"><a href="#drawPoints-float-pts-int-offset-int-count-Paint-paint-drawPoints-float-pts-Paint-paint-画点-批量" class="headerlink" title="drawPoints(float[] pts,int offset,int count,Paint paint)/drawPoints(float[] pts,Paint paint)画点 批量"></a>drawPoints(float[] pts,int offset,int count,Paint paint)/drawPoints(float[] pts,Paint paint)画点 批量</h4><p>画多个点,pts是数组点的坐标，offset表示跳过数组的前x个数，count是要绘制多少个数（count/2为要绘制的点数 ）  </p>
+<h4 id="drawOval-float-left-float-top-float-right-float-bottom-Paint-paint"><a href="#drawOval-float-left-float-top-float-right-float-bottom-Paint-paint" class="headerlink" title="drawOval(float left,float top,float right,float bottom,Paint paint)"></a>drawOval(float left,float top,float right,float bottom,Paint paint)</h4><p>画椭圆</p>
+<h4 id="drawLine-float-startX-float-startY-float-stopX-float-stopY-Paint-paint"><a href="#drawLine-float-startX-float-startY-float-stopX-float-stopY-Paint-paint" class="headerlink" title="drawLine(float startX,float startY,float stopX,float stopY,Paint  paint)"></a>drawLine(float startX,float startY,float stopX,float stopY,Paint  paint)</h4><p>画线，需要起始点和终止点</p>
+<h4 id="drawLines-float-pts-int-offset-int-count-Paint-paint-drawLines-float-pts-Paint-paint"><a href="#drawLines-float-pts-int-offset-int-count-Paint-paint-drawLines-float-pts-Paint-paint" class="headerlink" title="drawLines(float[] pts,int offset,int count,Paint paint) / drawLines(float[] pts,Paint paint)"></a>drawLines(float[] pts,int offset,int count,Paint paint) / drawLines(float[] pts,Paint paint)</h4><p>画多条线</p>
+<h4 id="drawRoundRect-float-left-float-right-float-top-float-bottom-float-rx-float-ry-Paint-paint"><a href="#drawRoundRect-float-left-float-right-float-top-float-bottom-float-rx-float-ry-Paint-paint" class="headerlink" title="drawRoundRect(float left,float right,float top,float bottom,float rx,float ry,Paint paint)"></a>drawRoundRect(float left,float right,float top,float bottom,float rx,float ry,Paint paint)</h4><p>画圆角矩形，<code>rx</code>,<code>ry</code>分别是圆角的横向半径和纵向半径，也可以使用<code>drawRoundRect(RectF rect,float rx,float ry,Paint paint)</code>来绘制</p>
+<h4 id="drawArc-float-left-float-top-float-right-float-bottom-float-startAngle-float-sweepAngle-boolean-userCenter-Paint-paint"><a href="#drawArc-float-left-float-top-float-right-float-bottom-float-startAngle-float-sweepAngle-boolean-userCenter-Paint-paint" class="headerlink" title="drawArc(float left,float top,float right,float bottom,float startAngle,float sweepAngle,boolean userCenter,Paint paint)"></a>drawArc(float left,float top,float right,float bottom,float startAngle,float sweepAngle,boolean userCenter,Paint paint)</h4><p>使用一个椭圆来描述弧形。<code>startAngle</code>弧形的起始角度（x轴正向–&gt;正右的方向是0度的位置，顺时针为正，逆时针为负。），<code>sweepAngle</code>弧形划过的角度，<code>userCenter</code>是否连接到圆心(true–&gt;扇形，flase–&gt;弧形)</p>
+<h4 id="drawPath-Path-path-Paint-paint"><a href="#drawPath-Path-path-Paint-paint" class="headerlink" title="drawPath(Path path,Paint paint)"></a>drawPath(Path path,Paint paint)</h4><p>画自定义图形<br><code>Path</code>有两类方法，<strong>直接描述路径</strong>和<strong>辅助的设置或计算</strong></p>
+<h5 id="1-直接描述路径"><a href="#1-直接描述路径" class="headerlink" title="1. 直接描述路径"></a>1. 直接描述路径</h5><pre><code>addXXx() --- 添加子图形
+addCircle(float x,float y,float radius,Direction dir)   添加圆
+其中dir为画圆的路径的方向（顺时针CW和逆时针CCW）
+</code></pre><p>除了<code>addCircle()</code>还有类似的添加<strong>矩形</strong>，<strong>椭圆</strong>，<strong>圆角矩形</strong>等</p>
+<h6 id="xxxTo-——–画线（直线或曲线）"><a href="#xxxTo-——–画线（直线或曲线）" class="headerlink" title="xxxTo() ——–画线（直线或曲线）"></a>xxxTo() ——–画线（直线或曲线）</h6><pre><code>paint.setStyle(Style.STROKE)
+lineTo(float x,float y)  从当前位置向目标位置画一条直线（参数为**绝对坐标**）
+rLineTo(float x,float y) 参数为相对坐标
+</code></pre><h6 id="quadTo-rQuadTo-画两次贝塞尔曲线"><a href="#quadTo-rQuadTo-画两次贝塞尔曲线" class="headerlink" title="quadTo()/rQuadTo()画两次贝塞尔曲线"></a>quadTo()/rQuadTo()画两次贝塞尔曲线</h6><p>######cubicTo()/rCubicTo()画三次贝塞尔曲线</p>
+<h6 id="moveTo-float-x-float-y-rMoveTo-float-x-float-y"><a href="#moveTo-float-x-float-y-rMoveTo-float-x-float-y" class="headerlink" title="moveTo(float x,float y)/rMoveTo(float x,float y)"></a>moveTo(float x,float y)/rMoveTo(float x,float y)</h6><p>移动到目标位置</p>
+<h6 id="arcTo-RectF-oval-float-startAngle-float-sweepAngle-boolean-forceMoveTo-arcTo-RectF-oval-float-startAngle-float-sweepAngle"><a href="#arcTo-RectF-oval-float-startAngle-float-sweepAngle-boolean-forceMoveTo-arcTo-RectF-oval-float-startAngle-float-sweepAngle" class="headerlink" title="arcTo(RectF oval,float startAngle,float sweepAngle,     boolean forceMoveTo) / arcTo(RectF oval,float startAngle,float sweepAngle)"></a>arcTo(RectF oval,float startAngle,float sweepAngle,     boolean forceMoveTo) / arcTo(RectF oval,float startAngle,float sweepAngle)</h6><p>画弧形，其中<strong>forceMoveTo</strong>意思为是否留下移动的痕迹</p>
+<h6 id="addArc-…"><a href="#addArc-…" class="headerlink" title="addArc(…)"></a>addArc(…)</h6><p>也是画弧形，只是默认<strong>forceMoveTo</strong>为<strong>true</strong></p>
+<h6 id="close-封闭当前子图形"><a href="#close-封闭当前子图形" class="headerlink" title="close 封闭当前子图形"></a>close 封闭当前子图形</h6><h5 id="辅助的设置或计算"><a href="#辅助的设置或计算" class="headerlink" title="辅助的设置或计算"></a>辅助的设置或计算</h5><p>设置填充模式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Path.setFillType(Path.FillType ft)</span><br></pre></td></tr></table></figure></p>
+<p>FillType的取值</p>
+<ul>
+<li>EVEN_ODD</li>
+<li>WINDING(默认值)</li>
+<li>INVERSE_EVEN_ODD</li>
+<li><p>INVERSE_WINDING</p>
+<p>图示：<br><img src="./1529985222740.png" alt="Alt text"></p>
+</li>
+</ul>
 
     </article>
     <!-- license  -->
     
         <div class="license-wrapper">
             <p>原文作者: <a href="http://yoursite.com">John Doe</a>
-            <p>原文链接: <a href="http://yoursite.com/2018/06/20/hello-world/">http://yoursite.com/2018/06/20/hello-world/</a>
-            <p>发表日期: <a href="http://yoursite.com/2018/06/20/hello-world/">June 20th 2018, 9:55:35</a>
+            <p>原文链接: <a href="http://yoursite.com/2018/06/27/custom-view-andorid/">http://yoursite.com/2018/06/27/custom-view-andorid/</a>
+            <p>发表日期: <a href="http://yoursite.com/2018/06/27/custom-view-andorid/">June 27th 2018, 12:04:34</a>
             <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -414,13 +459,13 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href= "/2018/06/20/GitNote/" title= 扔物线Git掘金小册笔记 >
-                    <div class="nextTitle">扔物线Git掘金小册笔记</div>
-                </a>
-            
         </li>
         <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2018/06/20/toutiao-note/" title= 来自头条的屏幕适配方案 >
+                    <div class="prevTitle">来自头条的屏幕适配方案</div>
+                </a>
             
         </li>
     </ul>
@@ -529,7 +574,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Android自定义View-一"><span class="toc-number">1.</span> <span class="toc-text">Android自定义View(一)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Canvas"><span class="toc-number">1.1.</span> <span class="toc-text">Canvas</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#drawColor-int-color"><span class="toc-number">1.1.1.</span> <span class="toc-text">drawColor(int color)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawCircle-float-centerX-float-centerY-float-radius-Paint-paint"><span class="toc-number">1.1.2.</span> <span class="toc-text">drawCircle(float centerX,float centerY,float radius,Paint paint)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawRect-float-left-float-top-float-right-float-bottom"><span class="toc-number">1.1.3.</span> <span class="toc-text">drawRect(float left,float top,float right,float bottom)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawBitmap-Bitmap-bitmap-float-left-float-top-Paint-paint"><span class="toc-number">1.1.4.</span> <span class="toc-text">drawBitmap(Bitmap bitmap,float left,float top,Paint paint)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawText-String-text-float-x-float-y-Paint-paint"><span class="toc-number">1.1.5.</span> <span class="toc-text">drawText(String text,float x,float y,Paint paint)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Paint"><span class="toc-number">1.2.</span> <span class="toc-text">Paint</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#setColor"><span class="toc-number">1.2.1.</span> <span class="toc-text">setColor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setStyle-Paint-Style-style"><span class="toc-number">1.2.2.</span> <span class="toc-text">setStyle(Paint.Style style)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setStrokeWidth-float-width"><span class="toc-number">1.2.3.</span> <span class="toc-text">setStrokeWidth(float width)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setAntiAlias-boolean-aa"><span class="toc-number">1.2.4.</span> <span class="toc-text">setAntiAlias(boolean aa)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawPoint-float-x-float-y-Paint-paint"><span class="toc-number">1.2.5.</span> <span class="toc-text">drawPoint(float x,float y,Paint paint)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawPoints-float-pts-int-offset-int-count-Paint-paint-drawPoints-float-pts-Paint-paint-画点-批量"><span class="toc-number">1.2.6.</span> <span class="toc-text">drawPoints(float[] pts,int offset,int count,Paint paint)/drawPoints(float[] pts,Paint paint)画点 批量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawOval-float-left-float-top-float-right-float-bottom-Paint-paint"><span class="toc-number">1.2.7.</span> <span class="toc-text">drawOval(float left,float top,float right,float bottom,Paint paint)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawLine-float-startX-float-startY-float-stopX-float-stopY-Paint-paint"><span class="toc-number">1.2.8.</span> <span class="toc-text">drawLine(float startX,float startY,float stopX,float stopY,Paint  paint)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawLines-float-pts-int-offset-int-count-Paint-paint-drawLines-float-pts-Paint-paint"><span class="toc-number">1.2.9.</span> <span class="toc-text">drawLines(float[] pts,int offset,int count,Paint paint) / drawLines(float[] pts,Paint paint)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawRoundRect-float-left-float-right-float-top-float-bottom-float-rx-float-ry-Paint-paint"><span class="toc-number">1.2.10.</span> <span class="toc-text">drawRoundRect(float left,float right,float top,float bottom,float rx,float ry,Paint paint)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawArc-float-left-float-top-float-right-float-bottom-float-startAngle-float-sweepAngle-boolean-userCenter-Paint-paint"><span class="toc-number">1.2.11.</span> <span class="toc-text">drawArc(float left,float top,float right,float bottom,float startAngle,float sweepAngle,boolean userCenter,Paint paint)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#drawPath-Path-path-Paint-paint"><span class="toc-number">1.2.12.</span> <span class="toc-text">drawPath(Path path,Paint paint)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-直接描述路径"><span class="toc-number">1.2.12.1.</span> <span class="toc-text">1. 直接描述路径</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#xxxTo-——–画线（直线或曲线）"><span class="toc-number">1.2.12.1.1.</span> <span class="toc-text">xxxTo() ——–画线（直线或曲线）</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#quadTo-rQuadTo-画两次贝塞尔曲线"><span class="toc-number">1.2.12.1.2.</span> <span class="toc-text">quadTo()/rQuadTo()画两次贝塞尔曲线</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#moveTo-float-x-float-y-rMoveTo-float-x-float-y"><span class="toc-number">1.2.12.1.3.</span> <span class="toc-text">moveTo(float x,float y)/rMoveTo(float x,float y)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#arcTo-RectF-oval-float-startAngle-float-sweepAngle-boolean-forceMoveTo-arcTo-RectF-oval-float-startAngle-float-sweepAngle"><span class="toc-number">1.2.12.1.4.</span> <span class="toc-text">arcTo(RectF oval,float startAngle,float sweepAngle,     boolean forceMoveTo) / arcTo(RectF oval,float startAngle,float sweepAngle)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#addArc-…"><span class="toc-number">1.2.12.1.5.</span> <span class="toc-text">addArc(…)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#close-封闭当前子图形"><span class="toc-number">1.2.12.1.6.</span> <span class="toc-text">close 封闭当前子图形</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#辅助的设置或计算"><span class="toc-number">1.2.12.2.</span> <span class="toc-text">辅助的设置或计算</span></a></li></ol></li></ol></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
